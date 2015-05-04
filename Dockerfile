@@ -26,19 +26,8 @@ RUN mkdir /docker-entrypoint-initdb.d
 
 RUN apt-key adv --keyserver ha.pool.sks-keyservers.net --recv-keys B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8
 
-ENV PG_MAJOR 9.4
-ENV PG_VERSION 9.4.1-1.pgdg70+1
-
 RUN echo 'deb http://apt.postgresql.org/pub/repos/apt/ wheezy-pgdg main' 9.4 > /etc/apt/sources.list.d/pgdg.list
-
-RUN apt-get update \
-	&& apt-get install -y postgresql-common \
-	&& sed -ri 's/#(create_main_cluster) .*$/\1 = false/' /etc/postgresql-common/createcluster.conf \
-	&& apt-get install -y \
-		postgresql-9.4 \
-		postgresql-contrib-9.4 \
-	&& rm -rf /var/lib/apt/lists/*
-
+RUN apt-get update && apt-get install -y postgresql-9.4 postgresql-contrib-9.4 && rm -rf /var/lib/apt/lists/*
 RUN mkdir -p /var/run/postgresql && chown -R postgres /var/run/postgresql
 
 # allow autostart again
@@ -46,3 +35,5 @@ RUN	rm /usr/sbin/policy-rc.d
 
 ADD	. /usr/bin
 RUN	chmod +x /usr/bin/start_pgsql.sh
+RUN echo 'host all all 0.0.0.0/0 md5' >> /etc/postgresql/9.4/main/pg_hba.conf
+RUN sed -i -e"s/var\/lib/opt/g" /etc/postgresql/9.4/main/postgresql.conf
