@@ -29,14 +29,14 @@ RUN apt-key adv --keyserver ha.pool.sks-keyservers.net --recv-keys B97B0AFCAA1A4
 ENV PG_MAJOR 9.4
 ENV PG_VERSION 9.4.1-1.pgdg70+1
 
-RUN echo 'deb http://apt.postgresql.org/pub/repos/apt/ wheezy-pgdg main' $PG_MAJOR > /etc/apt/sources.list.d/pgdg.list
+RUN echo 'deb http://apt.postgresql.org/pub/repos/apt/ wheezy-pgdg main' 9.4 > /etc/apt/sources.list.d/pgdg.list
 
 RUN apt-get update \
 	&& apt-get install -y postgresql-common \
 	&& sed -ri 's/#(create_main_cluster) .*$/\1 = false/' /etc/postgresql-common/createcluster.conf \
 	&& apt-get install -y \
-		postgresql-$PG_MAJOR=$PG_VERSION \
-		postgresql-contrib-$PG_MAJOR=$PG_VERSION \
+		postgresql-9.4 \
+		postgresql-contrib-9.4 \
 	&& rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /var/run/postgresql && chown -R postgres /var/run/postgresql
