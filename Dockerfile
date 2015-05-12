@@ -1,4 +1,4 @@
-FROM	ubuntu:trusty
+FROM	ubuntu:precise
 MAINTAINER spectosi "info@specto.si"
 
 # prevent apt from starting postgres right after the installation
